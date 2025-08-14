@@ -1,4 +1,4 @@
-name: Demo mostrar entorno según la rama
+name: Demo mostrar variables y secretos
 
 on:
   push:
@@ -9,31 +9,15 @@ on:
   workflow_dispatch:
 
 jobs:
-  demo:
+  show-vars:
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name }}
 
     steps:
-      - name: Mostrar rama detectada
-        run: echo "Rama actual: ${{ github.ref_name }}"
-
-      - name: Mostrar mensaje según entorno
-        run: |
-          if [ "${{ github.ref_name }}" = "dev" ]; then
-            echo "Entorno DEV"
-          elif [ "${{ github.ref_name }}" = "qa" ]; then
-            echo "Entorno QA"
-          elif [ "${{ github.ref_name }}" = "main" ]; then
-            echo "Entorno MAIN"
-          else
-            echo "Entorno desconocido"
-          fi
-
-      - name: Mostrar variables y secretos
+      - name: Mostrar variables y secretos del entorno
         env:
-          MY_VARIABLE: ${{ vars.MY_VARIABLE }}
-          MY_SECRET: ${{ secrets.MY_SECRET }}
+          MI_VARIABLE: ${{ vars.MY_VARIABLE }}
+          MI_SECRETO: ${{ secrets.MY_SECRET }}
         run: |
-          echo "MY_VARIABLE = $MY_VARIABLE"
-          echo "MY_SECRET = $MY_SECRET"
-
+          echo "MY_VARIABLE = $MI_VARIABLE"
+          echo "MY_SECRET = $MI_SECRETO"
