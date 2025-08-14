@@ -1,5 +1,5 @@
 
-name: Demo: mostrar entorno según la rama
+name: Demo mostrar entorno según la rama
 
 on:
   push:
