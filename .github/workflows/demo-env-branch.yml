@@ -18,15 +18,15 @@ jobs:
         run: echo 'Rama actual: ${{ github.ref_name }}'
 
       - name: Si es DEV
-        if: ${{ github.ref_name == 'dev' }}
+        if: github.ref_name == 'dev'
         run: echo 'Entorno DEV'
 
       - name: Si es QA
-        if: ${{ github.ref_name == 'qa' }}
+        if: github.ref_name == 'qa'
         run: echo 'Entorno QA'
 
       - name: Si es MAIN
-        if: ${{ github.ref_name == 'main' }}
+        if: github.ref_name == 'main'
         run: echo 'Entorno MAIN'
 
       - name: Mostrar variable NO sensible
@@ -34,3 +34,4 @@ jobs:
 
       - name: Mostrar secreto (enmascarado)
         run: echo 'MY_SECRET=${{ secrets.MY_SECRET }}'
+
