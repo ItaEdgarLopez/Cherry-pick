@@ -15,23 +15,26 @@ jobs:
 
     steps:
       - name: Mostrar rama detectada
-        run: echo 'Rama actual: ${{ github.ref_name }}'
+        run: echo "Rama actual: ${{ github.ref_name }}"
 
-      - name: Si es DEV
-        if: github.ref_name == 'dev'
-        run: echo 'Entorno DEV'
+      - name: Mostrar mensaje según entorno
+        run: |
+          if [ "${{ github.ref_name }}" = "dev" ]; then
+            echo "Entorno DEV"
+          elif [ "${{ github.ref_name }}" = "qa" ]; then
+            echo "Entorno QA"
+          elif [ "${{ github.ref_name }}" = "main" ]; then
+            echo "Entorno MAIN"
+          else
+            echo "Entorno desconocido"
+          fi
 
-      - name: Si es QA
-        if: github.ref_name == 'qa'
-        run: echo 'Entorno QA'
+      - name: Mostrar variables y secretos
+        env:
+          MY_VARIABLE: ${{ vars.MY_VARIABLE }}
+          MY_SECRET: ${{ secrets.MY_SECRET }}
+        run: |
+          echo "MY_VARIABLE = $MY_VARIABLE"
+          echo "MY_SECRET = $MY_SECRET"
 
-      - name: Si es MAIN
-        if: github.ref_name == 'main'
-        run: echo 'Entorno MAIN'
-
-      - name: Mostrar variable NO sensible
-        run: echo 'MY_VARIABLE=${{ vars.MY_VARIABLE }}'
-
-      - name: Mostrar secreto (enmascarado)
-        run: echo 'MY_SECRET=${{ secrets.MY_SECRET }}'
 
