@@ -1,37 +1,39 @@
-
-name: Demo: mostrar entorno según la rama
+name: Demo mostrar entorno según la rama
 
 on:
   push:
-    branches: [dev, qa, main]   # Se ejecuta automáticamente al hacer push a estas ramas
-  workflow_dispatch:             # Permite ejecutarlo manualmente desde Actions
+    branches:
+      - dev
+      - qa
+      - main
+  workflow_dispatch:
 
 jobs:
   demo:
     runs-on: ubuntu-latest
-
-    # Importante: usamos el nombre de la rama como nombre de ENVIRONMENT
-    # Para que el job lea los secrets/vars del Environment 'dev', 'qa' o 'main'
     environment: ${{ github.ref_name }}
 
     steps:
       - name: Mostrar rama detectada
         run: echo "Rama actual: ${{ github.ref_name }}"
 
-      - name: Si es DEV
-        if: ${{ github.ref_name == 'dev' }}
-        run: echo "✅ Esto es el entorno DEV"
+      - name: Mostrar mensaje según entorno
+        run: |
+          if [ "${{ github.ref_name }}" = "dev" ]; then
+            echo "Entorno DEV"
+          elif [ "${{ github.ref_name }}" = "qa" ]; then
+            echo "Entorno QA"
+          elif [ "${{ github.ref_name }}" = "main" ]; then
+            echo "Entorno MAIN"
+          else
+            echo "Entorno desconocido"
+          fi
 
-      - name: Si es QA
-        if: ${{ github.ref_name == 'qa' }}
-        run: echo "🔍 Esto es el entorno QA"
+      - name: Mostrar variables y secretos
+        env:
+          MY_VARIABLE: ${{ vars.MY_VARIABLE }}
+          MY_SECRET: ${{ secrets.MY_SECRET }}
+        run: |
+          echo "MY_VARIABLE = $MY_VARIABLE"
+          echo "MY_SECRET = $MY_SECRET"
 
-      - name: Si es MAIN
-        if: ${{ github.ref_name == 'main' }}
-        run: echo "🚀 Esto es el entorno MAIN"
-
-      - name: Mostrar variable NO sensible (Environment variable)
-        run: echo "MY_VARIABLE = ${{ vars.MY_VARIABLE }}"
-
-      - name: Mostrar secreto (enmascarado por seguridad)
-        run: echo "MY_SECRET = ${{ secrets.MY_SECRET }}"
